@@ -14,17 +14,26 @@
                 - mongodb
                 
          - name: retrieve EasyRentals package from AWS-S3
-           command: wget https://s3.amazonaws.com/shiva-project-omega/Application-0.0.1-SNAPSHOT.war
+           get_url: 
+                url: https://s3.amazonaws.com/shiva-project-omega/Application-0.0.1-SNAPSHOT.war 
+                dest: /home/shivakumar_chinnam
 
          - name: move the package to required location
-           command: rm -r /var/lib/tomcat8/webapps/ROOT
+           file: 
+                path: /var/lib/tomcat8/webapps/ROOT 
+                state: absent
 
          - name: move war to webapps folder
-           command: mv Application-0.0.1-SNAPSHOT.war /var/lib/tomcat8/webapps
-
+           file: 
+                src: Application-0.0.1-SNAPSHOT.war 
+                dest: /var/lib/tomcat8/webapps
+           #- name: run mongodb service 
+           #service: name: mongod status: started
          - name: run the tomcat server
-           command: service tomcat8 start
+           service: 
+                name: tomcat8 
+                state: started
 
          - name: run the EasyRentals application
-           command: java -jar /var/lib/tomcat8/webapps/Application-0.0.1-SNAPSHOT.war
+           shell: "java -jar /var/lib/tomcat8/webapps/Application-0.0.1-SNAPSHOT.war"
 ...
