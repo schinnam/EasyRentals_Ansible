@@ -1,0 +1,30 @@
+---
+- hosts: all
+  become: yes
+  tasks: 
+         - name: updating apt cache
+           apt: update_cache=true
+         
+         - name: install required packages
+           apt: pkg={{item}} state=present
+           with_items:
+                - openjdk-8-jre
+                - apache2
+                - tomcat8
+                - mongodb
+                
+         - name: retrieve EasyRentals package from AWS-S3
+           command: wget https://s3.amazonaws.com/shiva-project-omega/Application-0.0.1-SNAPSHOT.war
+
+         - name: move the package to required location
+           command: rm -r /var/lib/tomcat8/webapps/ROOT
+
+         - name: move war to webapps folder
+           command: mv Application-0.0.1-SNAPSHOT.war /var/lib/tomcat8/webapps
+
+         - name: run the tomcat server
+           command: service tomcat8 start
+
+         - name: run the EasyRentals application
+           command: java -jar /var/lib/tomcat8/webapps/Application-0.0.1-SNAPSHOT.war
+...
