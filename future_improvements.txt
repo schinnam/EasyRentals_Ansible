@@ -1,0 +1,30 @@
+#Direct usage of variables:
+vars:
+  NAME: SHIVA
+tasks:
+  - debug:
+    msg: "HEllO, {{NAME}}"
+
+# take variables as inputs from seperate variables file
+vars_files:
+  - var_file.yml
+  #content of variables yml
+    NAME: SHIVA
+
+# take the variables while execution
+vars_prompt:
+  - name: "NAME"
+    prompt: "Enter the username"
+    private: No
+  - name: "PASSWORD"
+    prompt: "Enter the password"
+    private: Yes
+    
+    
+    
+# Host specific and Hosts group specific variables can be created using these files
+ansible/group_vars/raleigh -->defining variables for raleigh host-group
+ansible/host_vars/foosball --> defining variables for host name foosball
+
+
+#defining roles:
